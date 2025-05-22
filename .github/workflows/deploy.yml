@@ -4,19 +4,19 @@ name: Connection to SSH
 on:
   push:
     branches: [main]
-  
-deploy:
-    needs: build
-    runs-on: ubuntu-latest
+jobs:
 
-    steps:
+  deploy:
+      runs-on: ubuntu-latest
 
-      - name: SSH into EC2 and deploy container
-        uses: appleboy/ssh-action@v0.1.10
-        with: 
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.USER_SSH_KEY }}
-          script: |
-          docker run -d \
-          --name postgresql-dev \ -e POSTGRES_USER=${{secrets.POSTGRES_USER }}\ -e POSTGRES_PASSWORD=${{secrets.POSTGRES_PASSWORD}} \-e POSTGRES_DB=${{secrets.POSTGRES_DB}} \-p 5432:5432 \postgres:15
+      steps:
+
+        - name: SSH into EC2 and deploy container
+          uses: appleboy/ssh-action@v0.1.10
+          with: 
+            host: ${{ secrets.EC2_HOST }}
+            username: ${{ secrets.EC2_USER }}
+            key: ${{ secrets.USER_SSH_KEY }}
+            script: |
+            docker run -d \
+            --name postgresql-dev \ -e POSTGRES_USER=${{secrets.POSTGRES_USER }}\ -e POSTGRES_PASSWORD=${{secrets.POSTGRES_PASSWORD}} \-e POSTGRES_DB=${{secrets.POSTGRES_DB}} \-p 5432:5432 \postgres:15
